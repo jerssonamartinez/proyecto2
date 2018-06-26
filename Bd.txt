@@ -1,0 +1,95 @@
+CREATE TABLE Producto (
+  idProducto SERIAL   NOT NULL ,
+  codProd INTEGER   NOT NULL ,
+  cantDisp INTEGER   NOT NULL ,
+  precio INTEGER   NOT NULL ,
+  fechaProd DATE    ,
+  fechaVenc DATE    ,
+  valorCompra INTEGER    ,
+  iva INTEGER      ,
+  nombreprod VARCHAR   ,	 
+PRIMARY KEY(idProducto, codProd));
+
+
+
+
+CREATE TABLE Proveedor (
+  idProveedor SERIAL  NOT NULL ,
+  nombreProveedor VARCHAR    ,
+  telefono VARCHAR    ,
+  entidad VARCHAR      ,
+PRIMARY KEY(idProveedor));
+
+
+
+
+CREATE TABLE cliente (
+  idcliente SERIAL  NOT NULL ,
+  nombreCli VARCHAR    ,
+  numeroCli INTEGER      ,
+PRIMARY KEY(idcliente));
+
+
+
+
+CREATE TABLE Venta (
+  idVenta SERIAL  NOT NULL ,
+  codProd INTEGER   NOT NULL ,
+  idProd INTEGER    ,
+  nombreProd VARCHAR    ,
+  codVenta INTEGER    ,
+  totalVenta INTEGER    ,
+  fechaVenta DATE    ,
+  descuentos INTEGER    ,
+  cantidad INTEGER      ,
+PRIMARY KEY(idVenta),
+  FOREIGN KEY(idProd, codProd)
+    REFERENCES Producto(idProducto, codProd));
+
+
+CREATE INDEX IFK_Rel_01 ON Venta (idProd, codProd);
+
+
+CREATE TABLE Compra (
+  idCompra SERIAL  NOT NULL ,
+  codProd INTEGER   NOT NULL ,
+  idProd INTEGER    ,
+  codCompra INTEGER   NOT NULL ,
+  totalCompra INTEGER    ,
+  fechaCompra DATE   ,
+  costoProveedor INTEGER    ,
+  cantCompra INTEGER      ,
+PRIMARY KEY(idCompra),
+  FOREIGN KEY(idProd, codProd)
+    REFERENCES Producto(idProducto, codProd));
+
+
+CREATE INDEX IFK_Rel_02id ON Compra (idProd, codProd);
+
+
+CREATE TABLE Venta_has_cliente (
+  Venta_idVenta INTEGER   NOT NULL ,
+  cliente_idcliente INTEGER   NOT NULL   ,
+PRIMARY KEY(Venta_idVenta, cliente_idcliente),
+  FOREIGN KEY(Venta_idVenta)
+    REFERENCES Venta(idVenta),
+  FOREIGN KEY(cliente_idcliente)
+    REFERENCES cliente(idcliente));
+
+
+CREATE INDEX IFK_Rel_05 ON Venta_has_cliente (Venta_idVenta);
+CREATE INDEX IFK_Rel_06 ON Venta_has_cliente (cliente_idcliente);
+
+
+CREATE TABLE Compra_has_Proveedor (
+  idCompra INTEGER   NOT NULL ,
+  idProveedor INTEGER   NOT NULL   ,
+PRIMARY KEY(idCompra, idProveedor),
+  FOREIGN KEY(idCompra)
+    REFERENCES Compra(idCompra),
+  FOREIGN KEY(idProveedor)
+    REFERENCES Proveedor(idProveedor));
+
+
+
+
